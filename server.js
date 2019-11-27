@@ -1,5 +1,7 @@
+require('dotenv').config()
 var express = require("express");
 var mongoose = require("mongoose");
+
 
 var app = express();
 var PORT = process.env.PORT || 3000;
@@ -12,6 +14,7 @@ app.use(express.json());
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
   uri = process.env.ATLAS_URI; // connection string for Atlas here
+  console.log(process.env.ATLAS_URI)
 } else {
   uri = process.env.ATLAS_URI; // connection string for localhost mongo here
 }
@@ -20,7 +23,8 @@ require("./routes/apiRoutes")(app);
 require("./routes/htmlRoutes")(app);
 
 mongoose.connect(process.env.ATLAS_URI || "mongodb://localhost/imageperformance", {
-  useNewUrlParser: true
+  useNewUrlParser: true,
+  useUnifiedTopology: true
 });
 
 app.listen(PORT, function() {
